@@ -1,3 +1,4 @@
+#!/usr/bin/env nextflow
 // this is a work in process
 
 params.in = null
