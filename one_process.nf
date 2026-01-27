@@ -3,7 +3,7 @@ process count_words{
         path word_file
     script:
         """
-        cat /Users/leonardo_martin/Nextflow/data/ipsum.txt \\
+        cat /Users/leonardo_martin/Repositories/Nextflow-ABI-2025-3/data/ipsum.txt \\
             | tr -s ' ' '\n' \\
             | tr -d '[:punct:]' \\
             | tr '[:upper:]' '[:lower:]' \\
