@@ -95,7 +95,7 @@ process take_most_common_word{
         path word_file
 
     output: 
-        stdout 
+        path "out.most.common.word.txt" 
 
     script:
         """
@@ -105,7 +105,7 @@ process take_most_common_word{
         last_line <- tail(word_counts, n=1)
         most_common <- strsplit(trimws(last_line), " ")[[1]][1]
         # writeTable("out.counted.txt", most_common, sep=" ")
-        # writeLines(most_common, "out.counted.txt")
+        writeLines(most_common, "out.most.common.word.txt")
 
         cat(most_common)
         """
