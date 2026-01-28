@@ -63,11 +63,33 @@ process count_words{
 
     script:
         """
-        cat "$word_file" \\
-            | sort \\
-            | uniq -c \\
-            | sort -n \\
-        > out.counted.txt
+        #!/usr/bin/env python
+
+    from collections import Counter
+    from pathlib import Path
+    from operator import itemgetter
+
+    # open and read the normalized word file
+    word_path = Path("$word_file")
+    with word_path.open() as word_file:
+        words = word_file.read().splitlines()
+
+    # do the counting, and sort the results
+    counts = Counter(words)
+    sorted_words = [
+      f"{count} {word}\\n"
+      for count, word
+      in sorted(counts.items(), key=itemgetter(1))
+    ]
+
+    # write the sorted word lines
+    out_path = Path("out.counted.txt")
+    with out_path.open("w") as out_file:
+        out_file.writelines(sorted_words)
+    """
+}
+
+// cat "out.normalized.txt"
         """    
 }
 
