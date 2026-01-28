@@ -18,7 +18,7 @@ process count_words{
 }
 
 workflow {
-    ch_input = channel.fromPath("/Users/leonardo_martin/Nextflow/data/ipsum.txt")
+    ch_input = channel.fromPath("/Users/leonardo_martin/Repositories/Nextflow-ABI-2025-3/data/ipsum.txt")
     count_words(ch_input)
 }
 
