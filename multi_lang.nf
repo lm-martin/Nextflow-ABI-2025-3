@@ -89,8 +89,6 @@ process count_words{
         """
 }
 
-// cat "out.normalized.txt"
-
 
 process take_most_common_word{
     input: 
