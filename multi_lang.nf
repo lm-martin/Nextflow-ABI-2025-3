@@ -98,7 +98,7 @@ process take_most_common_word{
         path word_file
 
     output: 
-        path "out.most.common.word.txt"
+        stdout 
 
     script:
         """
