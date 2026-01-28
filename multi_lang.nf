@@ -3,7 +3,7 @@
 // this is a work in process
 
 params.in = null
-params.help = false
+params.help = null
 
 def usage() {
     log.info"""
