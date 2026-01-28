@@ -107,7 +107,7 @@ process take_most_common_word{
         # writeTable("out.counted.txt", most_common, sep=" ")
         # writeLines(most_common, "out.counted.txt")
 
-        print(most_common)
+        cat(most_common)
         """
 }
 
