@@ -2,8 +2,8 @@
 // we can share here
 // bash line: nextflow run main.nf  --reference NC_000913.3 --data "data/samples/*_R{1,2}.fq"
 // run from github: nextflow run theneti3/nf-pipeline  --reference NC_000913.3 --data "data/samples/*_R{1,2}.fq"
-// Add the option --profile [apple_silicon]
-// local: nextflow run main.nf --profile m1_mac --reference NC_000913.3 --data ERR14841871
+// Add the option -profile [apple_silicon]
+// local: nextflow run main.nf -profile apple_silicon --reference NC_000913.3 --data ERR14841871
 
 // _______________________________
 //         Parameters
