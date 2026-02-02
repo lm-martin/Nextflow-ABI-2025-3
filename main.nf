@@ -1,14 +1,25 @@
 
-// we can share here
-// bash line: nextflow run main.nf  --reference NC_000913.3 --data "data/samples/*_R{1,2}.fq"
-// run from github: nextflow run theneti3/nf-pipeline  --reference NC_000913.3 --data "data/samples/*_R{1,2}.fq"
-// Add the option -profile [apple_silicon]
-// local: nextflow run main.nf -profile apple_silicon --reference NC_000913.3 --data ERR14841871
+def usage() {
+    log.info"""
+
+    Documentation
+
+    // local: nextflow run main.nf -profile apple_silicon --reference NC_000913.3 --data ERR14841871
+    // run from github: nextflow run theneti3/nf-pipeline  --reference NC_000913.3 --data "data/samples/*_R{1,2}.fq"
+
+    OPTIONS
+    --reference 
+    --data 
+    --out set to default folder "data-out"
+    -profile [apple_silicon]
+"""
+}
 
 // _______________________________
 //         Parameters
 // _______________________________
 
+params.help = null
 params.reference = null
 params.data = null
 // sets a default out directory
@@ -111,6 +122,11 @@ process fastp {
 // _______________________________
 
 workflow {
+    if (params.help) {
+        usage()
+        exit 0
+    }
+
     if (params.reference == null) {
         println ("Missing reference")
         exit 1
