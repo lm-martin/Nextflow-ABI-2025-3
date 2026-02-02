@@ -51,8 +51,7 @@ process fetch_reference {
 // Fetch fastq files from SRA
 process fetch_data {
     conda "bioconda::sra-tools=3.2.1"
-    label "mem_cpus"
-
+    
     input:
         val accession
 
@@ -60,20 +59,19 @@ process fetch_data {
         tuple val(accession), path("raw_fastq_files/${accession}/*.fastq"), emit: fastq_files
 
     script:
-
+        def args = task.ext.args ?:''
         """
         mkdir -p raw_fastq_files
         fasterq-dump ${accession} \\
         --outdir ./raw_fastq_files/${accession} \\
-        $args \\
-        --split-files
+        --split-files \\
+        $args
         """
 }
 
 // Execute fastqc analysis on raw files
 process fastqc{
     conda "bioconda::fastqc=0.12.1"
-    label "mem_cpus"
     
     input: 
         //val fastq_data
@@ -86,6 +84,7 @@ process fastqc{
         //sample_id = sample_id[0]
         //read1 = sample_id[1][0]
         //read2 = sample_id[1][1]
+        def args = task.ext.args ?:''
     
         """
         mkdir -p fastqc_reports
