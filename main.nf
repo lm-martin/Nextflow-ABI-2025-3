@@ -51,7 +51,7 @@ process fetch_reference {
 // Fetch fastq files from SRA
 process fetch_data {
     conda "bioconda::sra-tools=3.2.1"
-    label "mem_&_threads"
+    label "mem_cpus"
 
     input:
         val accession
@@ -72,7 +72,7 @@ process fetch_data {
 // Execute fastqc analysis on raw files
 process fastqc{
     conda "bioconda::fastqc=0.12.1"
-    label "mem_&_threads"
+    label "mem_cpus"
     
     input: 
         //val fastq_data
@@ -95,7 +95,7 @@ process fastqc{
 // Execute fastp trimming on raw data
 process fastp {
     conda "bioconda::fastp=1.1.0"
-    
+
     input:
         val sample_data
 
