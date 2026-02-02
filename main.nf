@@ -65,6 +65,7 @@ process fetch_data {
         mkdir -p raw_fastq_files
         fasterq-dump ${accession} \\
         --outdir ./raw_fastq_files/${accession} \\
+        $args \\
         --split-files
         """
 }
@@ -88,7 +89,7 @@ process fastqc{
     
         """
         mkdir -p fastqc_reports
-        fastqc ${reads[0]} ${reads[1]} --outdir fastqc_reports
+        fastqc ${reads[0]} ${reads[1]} --outdir fastqc_reports $args
         """
 }
 
