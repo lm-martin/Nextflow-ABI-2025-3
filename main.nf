@@ -8,6 +8,7 @@ def usage() {
     // run from github: nextflow run theneti3/nf-pipeline  --reference NC_000913.3 --data "data/samples/*_R{1,2}.fq"
 
     OPTIONS
+    --help
     --reference 
     --data 
     --out set to default folder "data-out"
@@ -50,6 +51,7 @@ process fetch_reference {
 // Fetch fastq files from SRA
 process fetch_data {
     conda "bioconda::sra-tools=3.2.1"
+    label "mem_&_threads"
 
     input:
         val accession
@@ -70,6 +72,7 @@ process fetch_data {
 // Execute fastqc analysis on raw files
 process fastqc{
     conda "bioconda::fastqc=0.12.1"
+    label "mem_&_threads"
     
     input: 
         //val fastq_data
@@ -92,6 +95,7 @@ process fastqc{
 // Execute fastp trimming on raw data
 process fastp {
     conda "bioconda::fastp=1.1.0"
+    
     input:
         val sample_data
 
@@ -109,7 +113,6 @@ process fastp {
         read2 = sample_data[1][1]
 
         """
-        
         fastp --in1 ${read1} --in2 ${read2} --out1 ${sample_ID}_R1.trimmed.fq.gz --out2 ${sample_ID}_R2.trimmed.fq.gz
         """
 }
@@ -137,7 +140,7 @@ workflow {
         exit 1
     }
 
-    println("$params.reference, $params.data, $params.out")
+    // println("$params.reference, $params.data, $params.out")
 
     // def ch_input = channel.fromSRA(params.data, apiKey: "d5822ef54698cb072e0cf866736fd5f6ab08")
         
