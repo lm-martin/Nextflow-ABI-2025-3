@@ -141,7 +141,15 @@ process fastqc_trimmed {
 }
 
 // Reporting
-// Execute multiqc on raw data and trimmed data 
+// Execute multiqc on raw data and trimmed data
+process multiqc {
+    input:
+
+    output:
+
+    script:
+
+}
 
 // _______________________________
 //         Workflow
@@ -171,29 +179,14 @@ workflow {
 
     def ch_reference = fetch_reference(params.reference)
         
-    fastqc(ch_input)
-        // | view
-    // pipe only the sample_ID channel into the fastqc_trimmed process
-    fastp(ch_input).trimmed_reads
-         | fastqc_trimmed
-        // | view
+    fastqc_raw_out = fastqc(ch_input)
+    fastp_out = fastp(ch_input)
+    // pipe only the trimmed_reads channel into the fastqc_trimmed process
+    fastqc_trimmed_out = fastqc_trimmed(fastp_out.trimmed_reads)
+    multiqc(
+        fastqc_raw_out.reports
+            .mix(fastqc_trimmed_out.trimmed_reports)
+            .collect()
+    ) | view
+       
 }
-
-
-
-
-
-
-
-
-
-
- /* 
- Add this to the config file later and try it out
- process {
-    // Apply this to any process that starts with 'fastqc'
-    withName: 'fastqc.*' {
-        conda = "bioconda::fastqc=0.12.1"
-    }
-}
-*/
