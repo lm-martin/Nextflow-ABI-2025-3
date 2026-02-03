@@ -147,7 +147,7 @@ process multiqc {
     publishDir "${params.out}/multiqc_report", mode: "copy"
 
     input:
-        path "all_fastqc_reports"
+        path all_fastqc_reports
 
     output:
         path "multiqc_report.html"
@@ -155,7 +155,7 @@ process multiqc {
     script:
         """
         # search everywhere in the current task folder for any usable report
-        multiqc .
+        multiqc ${all_fastqc_reports}
         """
 
 }
