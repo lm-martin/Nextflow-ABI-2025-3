@@ -71,7 +71,7 @@ process fetch_data {
 
 // Execute fastqc analysis on raw files
 process fastqc{
-    conda "bioconda::fastqc=0.12.1"
+    // conda "bioconda::fastqc=0.12.1"
     
     input: 
         //val fastq_data
@@ -121,7 +121,7 @@ process fastp {
 }
 
 process fastqc_trimmed {
-    conda "bioconda::fastqc=0.12.1"
+    // conda "bioconda::fastqc=0.12.1"
 
     input: 
         // Receive the tuple emitted by fastp.trimmed_reads
