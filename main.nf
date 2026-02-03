@@ -100,7 +100,9 @@ process fastp {
         val sample_data
 
     output:
-        path "*.trimmed.fq.gz" , emit: sample_ID //tuple (val(sample_ID), path("*.trimmed.fq.gz)) suggested output name
+        // path "*.trimmed.fq.gz" , emit: sample_ID //tuple (val(sample_ID), path("*.trimmed.fq.gz)) suggested output name
+        // Emit a tuple so the next process knows which reads belong to which ID
+        tuple val(sample_ID), path("*.trimmed.fq.gz"), emit: trimmed_reads
         path "*.html" , emit: html_reports
         path "*.json" , emit: json_reports
 
@@ -113,8 +115,29 @@ process fastp {
         read2 = sample_data[1][1]
 
         """
-        fastp --in1 ${read1} --in2 ${read2} --out1 ${sample_ID}_R1.trimmed.fq.gz --out2 ${sample_ID}_R2.trimmed.fq.gz
+        fastp --in1 ${read1} --in2 ${read2} \\
+        --out1 ${sample_ID}_R1.trimmed.fq.gz --out2 ${sample_ID}_R2.trimmed.fq.gz
         """
+}
+
+process fastqc_trimmed {
+    conda "bioconda::fastqc=0.12.1"
+
+    input: 
+        // Receive the tuple emitted by fastp.trimmed_reads
+        tuple val(sample_ID), path(trimmed_reads) 
+        
+    output:
+        path "fastqc_trimmed_reports", emit: trimmed_reports
+        
+    script:
+        def args = task.ext.args ?:''
+
+        """
+        mkdir -p fastqc_trimmed_reports
+        fastqc ${trimmed_reads} --outdir fastqc_trimmed_reports $args
+        """
+        
 }
 
 // Reporting
@@ -150,9 +173,10 @@ workflow {
         
     fastqc(ch_input)
         // | view
-
-    fastp(ch_input)
-        // | view  
+    // pipe only the sample_ID channel into the fastqc_trimmed process
+    fastp(ch_input).trimmed_reads
+         | fastqc_trimmed
+        // | view
 }
 
 
@@ -164,4 +188,12 @@ workflow {
 
 
 
- 
+ /* 
+ Add this to the config file later and try it out
+ process {
+    // Apply this to any process that starts with 'fastqc'
+    withName: 'fastqc.*' {
+        conda = "bioconda::fastqc=0.12.1"
+    }
+}
+*/
