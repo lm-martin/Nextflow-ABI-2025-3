@@ -143,11 +143,19 @@ process fastqc_trimmed {
 // Reporting
 // Execute multiqc on raw data and trimmed data
 process multiqc {
+    conda "multiqc=1.29"
+    publishDir "${params.out}/multiqc_report", mode: "copy"
+
     input:
+        path "all_fastqc_reports"
 
     output:
+        path "multiqc_report.html"
 
     script:
+        """
+        multiqc ./
+        """
 
 }
 
