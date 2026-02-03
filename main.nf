@@ -154,7 +154,8 @@ process multiqc {
 
     script:
         """
-        multiqc ./
+        # search everywhere in the current task folder for any usable report
+        multiqc .
         """
 
 }
